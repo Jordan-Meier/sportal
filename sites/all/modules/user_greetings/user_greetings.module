@@ -1,0 +1,44 @@
+<?php
+global $user;
+var_dump($user);
+function user_greetings_menu() {
+    $items = array();
+    $items['welcome_message'] = array(
+        'title' => "Welcome!",
+        'page callback' => 'welcome_user',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['farewell'] = array(
+        'title' => 'Farewell Friend!',
+        'page callback' => 'say_farewell',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function welcome_user() {
+    global $user;
+    if(in_array('administrator', array_values($user->roles))) {
+        return '<p>Hello dear admin! Welcome to your domain.</p>';
+    } elseif (in_array('Moderator', array_values($user->roles))) {
+        return "<p>Welcome back, moderator! Moderate to your heart's content.</p>";
+    } elseif (in_array('authenticated user', array_values($user->roles))) {
+        return "<p>Howdy, partner. Your Authenticated status has been confirmed.";
+    } else {
+        return '<p>Welcome</p>';
+    }
+}
+
+function say_farewell() {
+    return '<p>Fare thee well my dear friend!</p>';
+}
+
+function user_greetings_user_login() {
+    $_GET['destination'] = 'welcome_message';
+}
+
+function user_greetings_user_logout() {
+    $_GET['destination'] = 'farewell';
+}
